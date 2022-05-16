@@ -1,0 +1,97 @@
+* {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 100%;
+    background: #FFf;
+    height: 100%;
+}
+
+*{
+    font-family: 'Asap', sans-serif;
+}
+
+.me-bg-pink {
+    background: rgb(255, 215, 210);
+}
+
+.me-bg-blue{
+    background-color: #9EC5FF;
+}
+
+.me-border-radius-10px {
+    border-radius: 10px;
+}
+
+.me-outline{
+    outline:1px #cccccc solid;
+}
+
+.me-btn {
+    padding: 10px;
+}
+
+.me-btn-green {
+    --color: #0ad8ab;
+    background: var(--color);
+    color: rgb(255, 255, 255);
+    border: 2px var(--color) solid;
+}
+
+.me-btn-green:hover {
+    background: rgb(255, 255, 255);
+    color: var(--color);
+    transition: .1s;
+    border: 2px var(--color) solid;
+}
+
+
+.me-btn-red {
+    --color: #ff7a7a;
+    background: var(--color);
+    color: rgb(255, 255, 255);
+    border: 2px var(--color) solid;
+}
+
+.me-btn-red:hover {
+    background: rgb(255, 255, 255);
+    color: var(--color);
+    transition: .1s;
+    border: 2px var(--color) solid;
+}
+
+.player > img{
+    width: 50px; 
+    height: 50px; 
+}
+
+.online-True{
+    display: inline-block;
+    background: #0ad8ab;
+    width: 10px;
+    height: 10px;
+}
+
+.online-False{
+    display: inline-block;
+    background: #ff7a7a;
+    width: 10px;
+    height: 10px;
+}
+
+.me-card-btn-light{
+    color:rgb(49, 49, 49);
+}
+
+.me-card-btn-light:hover{
+    background: rgb(228, 228, 228);
+    color:rgb(49, 49, 49);
+    transition: .25s;
+}
+
+.me-card-btn-light:active{
+    background: rgb(207, 207, 207);
+    color:rgb(49, 49, 49);
+}

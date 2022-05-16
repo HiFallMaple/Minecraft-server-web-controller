@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Login Minecraft Controller</title>
+  <link rel="icon" href="{{ url_for('static', filename='icon/main_icon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body>
+  <div class="title_bar">
+    <img src="{{ url_for('static', filename='icon/main_icon.ico') }}">
+    <h2>Minecraft Controller</h2>
+  </div>
+  <div id="article">
+    <div class="center">
+      <h2>Login</h2>
+      <form method="post">
+        <div class="txt_field">
+          <input type="text" name="username" required>
+          <span></span>
+          <label>StudentID</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" name="password" required>
+          <span></span>
+          <label>Password</label>
+        </div>
+        <div class="pass">Forgot Password?</div>
+        <input type="submit" value="Login">
+        <div class="signup_link">
+          Not a member? <a href="/signUp">Signup</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
