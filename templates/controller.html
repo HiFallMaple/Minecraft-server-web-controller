@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="zh-TW">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Controller</title>
+    <link rel="icon" href="{{ url_for('static', filename='icon/main_icon.ico') }}" type="image/x-icon">
+
+    <!-- socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+        integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+        crossorigin="anonymous"></script>
+    <!-- /socket.io -->
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- /jquery -->
+
+    <!-- css -->
+    <link rel="stylesheet" href="../static/css/controller.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- /css -->
+
+    <!-- webfonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700&display=swap" rel="stylesheet">
+    <link href='//fonts.googleapis.com/css?family=Asap:400,700,400italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <!-- /webfonts -->
+</head>
+
+
+<body class="d-flex flex-column">
+    <div id="status"></div>
+    <!-- Wait Modal -->
+    <div class="modal fade" id="waitModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="waitModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center w-100 fw-bolder">請稍等片刻</h5>
+                </div>
+                <div class="modal-body d-flex justify-item-center">
+                    <div class="spinner-grow text-primary mx-auto" role="status" style="width: 50px; height: 50px">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Wait Modal -->
+
+    <div class="container-fluid me-bg-pink pt-3 px-3 d-flex flex-column flex-grow-1">
+        <!-- navbar -->
+        <div class="mx-0">
+            <div class="row gx-3">
+                <div class="col-md-12">
+                    <nav class="navbar navbar-light bg-light me-border-radius-10px px-3">
+                        <a class="navbar-brand w-100 d-flex align-items-center" href="#">
+                            <img src="../static/icon/main_icon.ico" alt="" width="40" height="40"
+                                class="d-inline-block align-text-top">
+                            <h1 class="my-0 ms-3 fs-2 fw-bold text-secondary">Minecraft Controller</h1>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- /navbar -->
+
+
+        <div class="mx-0 mt-3 flex-grow-1">
+            <div class="row gx-3 h-100">
+                <div class="col-md-3 mb-3">
+                    <div class=" bg-light me-border-radius-10px h-100 py-3">
+                        <h2 class="m-0 fs-4 fw-bold text-secondary text-center">Server</h2>
+                        <div class="mt-3 px-3 py-2 border-top border-bottom border-3">
+                            <p class="m-0 fw-bolder text-secondary text-center">
+                                在線：<span class="rounded-circle online-{{is_online}}"></span>
+                            </p>
+                        </div>
+                        <div type="button" onclick="serverCtrl('startserver')" data-bs-toggle="modal"
+                            data-bs-target="#waitModal"
+                            class="me-btn me-btn-green w-75 text-center rounded-pill fw-bolder mx-auto my-3">啟動 Server
+                        </div>
+                        <div type="button" onclick="serverCtrl('stopserver')" data-bs-toggle="modal"
+                            data-bs-target="#waitModal"
+                            class="me-btn me-btn-red w-75 text-center rounded-pill fw-bolder mx-auto my-3">停止 Server
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="bg-light me-border-radius-10px h-100 py-3 pb-4 px-5 m-0">
+                        <h2 class="m-0 fs-4 fw-bold text-secondary text-center">Controller</h2>
+                        <div class="row g-4 mt-1">
+                            <div class="col-12">
+                                <div class="rounded overflow-hidden me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">文字指令</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0 px-2 py-1">
+                                            <div class="input-group input-group-sm p-0">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">/</span>
+                                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                                <button class="btn btn-outline-secondary px-3" type="button" id="button-addon2">送出</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="rounded overflow-hidden  me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">生存難度</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0">
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">和平</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">簡單</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">普通</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light text-decoration-none col" href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">困難</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="rounded overflow-hidden me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">防噴</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0">
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">開啟</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">關閉</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="rounded overflow-hidden me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">防爆</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0">
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">開啟</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">關閉</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="rounded overflow-hidden me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">時間設定</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0">
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">早上</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">中午</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">晚上</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light text-decoration-none col" href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">午夜</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="rounded overflow-hidden me-outline me-bg-blue">
+                                    <div class="text-light text-center fw-bolder py-2">天氣</div>
+                                    <div class="p-0 bg-light">
+                                        <div class="row w-100 m-0">
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">晴天</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light border-end text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">雨天</p>
+                                            </a>
+                                            <a class="p-0 me-card-btn-light text-decoration-none col"
+                                                href="">
+                                                <p class="text-center py-1 m-0 fw-bolder text-secondary">雷雨</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class=" bg-light me-border-radius-10px h-100 py-3">
+                        <h2 class="m-0 fs-4 fw-bold text-secondary text-center">Status</h2>
+                        <div class="mt-3 p-3 border-top border-bottom border-3">
+                            <p class="m-0 fw-bolder text-secondary">
+                                上限人數：{{max_players}}人
+                                <br>
+                                上線人數：{{players_num}}人
+                            </p>
+                        </div>
+                        {% for account in account_list %}
+                        <div class="player d-flex align-items-center mt-3 mx-3">
+                            <img src="https://mc-heads.net/avatar/{{account['id']}}" alt="頭貼">
+                            <p class="ms-3 my-0 fs-5 fw-bolder text-secondary">{{account['name']}}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+<script src="../static/js/controller_ajax.js"></script>
+<script src="../static/js/controller_socketio.js"></script>
+<!-- /js -->
+
+</html>

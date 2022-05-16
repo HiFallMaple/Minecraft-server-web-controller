@@ -1,0 +1,5 @@
+get-requirements-command
+test.py
+*.log
+venv/
+__pycache__/

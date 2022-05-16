@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Login-MinecraftServer</title>
+  <link rel="icon" href="{{ url_for('static', filename='icon/minecraft_server_icon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/signUp.css') }}">
+</head>
+
+<body>
+  <div class="title_bar">
+    <img src="{{ url_for('static', filename='icon/main_icon.ico') }}">
+    <h2>TKU 自動選課系統</h2>
+  </div>
+  <div id="article">
+    <div class="center">
+      <h2>Sign Up</h2>
+      <form method="post">
+        <div class="txt_field">
+          <input type="text" name="username" required>
+          <span></span>
+          <label>Email</label>
+        </div>
+        <div class="txt_field">
+          <input type="text" name="username" required>
+          <span></span>
+          <label>StudentID</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" name="password" required>
+          <span></span>
+          <label>Password</label>
+        </div>
+        <div class="verification_code">
+          <img src="{{ url_for('static', filename='img/verification_code.png') }}">
+          <div class="txt_field">
+            <input type="text" name="verify" required>
+            <span></span>
+            <label>Verification code</label>
+          </div>
+        </div>
+        <input type="checkbox" value="confirm" name="confirm">  <label>我已觀看過<a href="#">使用條款</a>，並同意所有內容</label>
+        <input type="submit" value="Sign Up">
+        <div class="signup_link">
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
